@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 resource "aws_vpc" "main" {
@@ -76,7 +76,7 @@ resource "aws_route_table_association" "rta2" {
 }
 
 resource "aws_security_group" "webserver" {
-  name        = "Webserver"
+  name        = "Terraform Demo"
   description = "Webserver network traffic"
   vpc_id      = aws_vpc.main.id
 
@@ -120,19 +120,13 @@ resource "aws_instance" "web" {
   #userdata
   user_data = <<EOF
 #!/bin/bash
-apt-get -y update
-apt-get -y install nginx
-
-cd /var/www/html
-rm *.html
-git clone https://github.com/cloudacademy/webgl-globe/ .
-cp -a src/* .
-rm -rf {.git,*.md,src,conf.d,docs,Dockerfile,index.nginx-debian.html}
+yum -y update
+yum -y install nginx
 
 systemctl restart nginx
 systemctl status nginx
 
-echo fin v1.00!
+echo "All Done"
 EOF
 
   tags = {
